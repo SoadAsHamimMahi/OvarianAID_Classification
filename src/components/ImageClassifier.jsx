@@ -230,10 +230,10 @@ export default function ImageClassifier({
 
                     <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} style={{ display: "none" }} />
 
-                    <div className="card card-elevated p-6 preview-wrapper">
+                    <div className="card p-6 preview-wrapper">
                         {!imageSrc ? (
                             <div
-                                className={`upload-zone ${isDragging ? "drag-over" : ""}`}
+                                className={`upload-zone-clean ${isDragging ? "drag-over" : ""}`}
                                 onDragEnter={handleDragEnter}
                                 onDragOver={handleDragOver}
                                 onDragLeave={handleDragLeave}
@@ -241,110 +241,105 @@ export default function ImageClassifier({
                                 onClick={openFilePicker}
                             >
                                 <div className="text-center cursor-pointer">
-                                    <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary/10 to-primary-light/10 flex items-center justify-center">
-                                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary">
+                                    <div className="w-16 h-16 mx-auto mb-4 rounded-lg bg-primary flex items-center justify-center">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" className="text-white">
                                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                                             <polyline points="17 8 12 3 7 8" />
                                             <line x1="12" y1="3" x2="12" y2="15" />
                                         </svg>
                                     </div>
                                     <h3 className="text-lg font-semibold text-gray-900 mb-2">Drag & drop your image here</h3>
-                                    <p className="text-muted mb-4">or click to browse</p>
+                                    <p className="text-sm text-gray-600 mb-4">or click to browse</p>
                                     <button className="btn-primary inline-flex items-center gap-2">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                                             <polyline points="17 8 12 3 7 8" />
                                             <line x1="12" y1="3" x2="12" y2="15" />
                                         </svg>
-                                        Upload & Analyze
+                                        Upload Image
                                     </button>
-                                    <p className="text-xs text-muted mt-4">Supports JPG, PNG, WEBP (Max 10MB)</p>
+                                    <p className="text-xs text-gray-500 mt-4">Supports JPG, PNG, WEBP (Max 10MB)</p>
                                 </div>
                             </div>
                         ) : (
-                            <div className="relative">
-                                <img
-                                    src={imageSrc}
-                                    alt="Histology image preview"
-                                    className={`preview-img ${overlayVisible ? "overlay-active" : ""}`}
-                                />
+                            <div className="space-y-4">
+                                <div className="preview-container-fixed">
+                                    <img
+                                        src={imageSrc}
+                                        alt="Histology image preview"
+                                        className="preview-img-clean"
+                                    />
+                                </div>
                                 
-                                {/* Result Overlay with Glassmorphism */}
-                                <div className={`result-overlay ${overlayVisible ? "visible success-animation" : ""}`} aria-hidden={!overlayVisible}>
-                                    <div className="result-handle" />
-                                    {predictions.length > 0 && (
+                                {/* Results Below Image */}
+                                {predictions.length > 0 && (
+                                    <div className="card p-5">
                                         <div className="space-y-4">
-                                            <div className="space-y-4">
-                                                <div>
-                                                    <div className="text-xs uppercase tracking-wide muted mb-2 font-semibold">Classification Result</div>
-                                                    <div className="text-2xl font-bold text-primary mb-4">{predictions[0].label}</div>
+                                            <div>
+                                                <div className="text-xs uppercase tracking-wide text-gray-500 mb-2 font-semibold">Classification Result</div>
+                                                <div className="text-xl md:text-2xl font-bold text-primary mb-3 break-words">{predictions[0].label}</div>
+                                            </div>
+                                            
+                                            <div>
+                                                <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
+                                                    <div className="text-xs uppercase tracking-wide text-gray-500 font-semibold whitespace-nowrap">Confidence</div>
+                                                    <div className="text-lg font-bold text-primary whitespace-nowrap" aria-label={`${(predictions[0].probability * 100).toFixed(1)} percent confidence`}>
+                                                        {(predictions[0].probability * 100).toFixed(1)}%
+                                                    </div>
                                                 </div>
-                                                
-                                                <div>
-                                                    <div className="flex items-center justify-between mb-2">
-                                                        <div className="text-xs uppercase tracking-wide muted font-semibold">Confidence</div>
-                                                        <div className="text-lg font-bold text-primary" aria-label={`${(predictions[0].probability * 100).toFixed(1)} percent confidence`}>
-                                                            {(predictions[0].probability * 100).toFixed(1)}%
-                                                        </div>
-                                                    </div>
-                                                    <div className="confidence-bar">
-                                                        <div 
-                                                            className="confidence-fill" 
-                                                            style={{ width: `${(predictions[0].probability * 100)}%` }}
-                                                        ></div>
-                                                    </div>
+                                                <div className="confidence-bar-clean">
+                                                    <div 
+                                                        className="confidence-fill-clean" 
+                                                        style={{ width: `${(predictions[0].probability * 100)}%` }}
+                                                    ></div>
                                                 </div>
                                             </div>
-                                            <div className="flex gap-3 pt-2 border-t border-border">
-                                <button
-                                    onClick={() => {
-                                        setImageSrc(null);
-                                        setPredictions([]);
-                                        setStatus("idle");
-                                    }}
-                                    className="btn-secondary flex-1"
-                                    aria-label="Clear current image and analyze another"
-                                >
-                                    Analyze Another
-                                </button>
+                                            <div className="flex gap-3 pt-3 border-t border-gray-200">
+                                                <button
+                                                    onClick={() => {
+                                                        setImageSrc(null);
+                                                        setPredictions([]);
+                                                        setStatus("idle");
+                                                        if (fileInputRef.current) {
+                                                            fileInputRef.current.value = '';
+                                                        }
+                                                    }}
+                                                    className="btn-secondary flex-1 whitespace-nowrap"
+                                                    aria-label="Clear current image and analyze another"
+                                                >
+                                                    Analyze Another
+                                                </button>
                                             </div>
                                         </div>
-                                    )}
-                                </div>
+                                    </div>
+                                )}
                             </div>
                         )}
-
-                        <div className="consent-wrapper">
-                            <label className="flex items-start gap-3 cursor-pointer">
-                                <input 
-                                    type="checkbox" 
-                                    checked={consent} 
-                                    onChange={(e) => setConsent(e.target.checked)}
-                                    className="mt-0.5"
-                                />
-                                <span className="text-sm muted leading-relaxed">
-                                    I acknowledge this is a decision-support tool and does not replace professional medical judgment.
-                                </span>
-                            </label>
-                        </div>
                     </div>
                 </div>
 
-                <aside className="space-y-6">
-                    <div className="card card-elevated p-6">
-                        <div className="flex items-center justify-between mb-6">
+                <aside className="space-y-5">
+                    <div className="card p-5">
+                        <div className="flex items-center justify-between mb-4">
                             <div className="flex-1">
-                                <div className="text-xs uppercase tracking-wide muted mb-3 font-semibold">Model Status</div>
-                                <div className={`status-badge ${
-                                    status === "idle" ? "" : 
-                                    status === "loading-model" ? "info pulse" : 
-                                    status === "predicting" ? "info pulse" : 
-                                    status === "ready" ? "success" : 
-                                    status === "error" ? "error" : ""
+                                <div className="text-xs uppercase tracking-wide text-gray-500 mb-2 font-semibold">Model Status</div>
+                                <div className={`status-badge-clean ${
+                                    status === "idle" ? "status-ready" : 
+                                    status === "loading-model" ? "status-loading" : 
+                                    status === "predicting" ? "status-loading" : 
+                                    status === "ready" ? "status-ready" : 
+                                    status === "error" ? "status-error" : ""
                                 }`}>
-                                    <span className="status-badge-dot"></span>
-                                    <span className="font-semibold">
-                                        {status === "idle" && "Ready to Analyze"}
+                                    <span className="status-badge-dot-clean"></span>
+                                    <span className="font-semibold text-sm flex items-center gap-2">
+                                        {status === "idle" && (
+                                            <>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-success">
+                                                    <polyline points="20 6 9 17 4 12" />
+                                                </svg>
+                                                <span>Ready to Analyze</span>
+                                            </>
+                                        )}
                                         {status === "loading-model" && "Loading Model..."}
                                         {status === "predicting" && "Analyzing..."}
                                         {status === "ready" && "Model Ready"}
@@ -355,7 +350,7 @@ export default function ImageClassifier({
 
                             <div className="text-right">
                                 {loading ? (
-                                    <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary-soft">
+                                    <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-100">
                                         <svg className="spinner text-primary" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                             <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeLinecap="round" opacity="0.3" />
                                             <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="30" strokeLinecap="round" />
@@ -369,60 +364,74 @@ export default function ImageClassifier({
                             </div>
                         </div>
 
-                        <div className="space-y-3">
+                        <div className="mt-4 pt-4 border-t border-gray-200">
+                            <label className="flex items-start gap-2 cursor-pointer">
+                                <input 
+                                    type="checkbox" 
+                                    checked={consent} 
+                                    onChange={(e) => setConsent(e.target.checked)}
+                                    className="mt-0.5 w-4 h-4"
+                                />
+                                <span className="text-xs text-gray-600 leading-relaxed">
+                                    I acknowledge this is a decision-support tool and does not replace professional medical judgment.
+                                </span>
+                            </label>
+                        </div>
+
+                        {imageSrc && consent && !loading && (
                             <button
                                 onClick={handleClassify}
-                                disabled={!imageSrc || !consent || loading}
-                                className="btn-primary w-full"
+                                className="btn-primary w-full text-base py-3 mt-4"
                             >
-                                {loading ? (
-                                    <>
-                                        <svg className="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                            <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeLinecap="round" opacity="0.3" />
-                                            <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="30" strokeLinecap="round" />
-                                        </svg>
-                                        <span>Processing...</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                            <polyline points="17 8 12 3 7 8" />
-                                            <line x1="12" y1="3" x2="12" y2="15" />
-                                        </svg>
-                                        <span>Analyze Image</span>
-                                    </>
-                                )}
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                                </svg>
+                                <span>Start Analysis</span>
                             </button>
-                            <p className="text-xs text-muted text-center">Press <kbd className="px-1.5 py-0.5 bg-gray-100 rounded text-xs font-mono">Enter</kbd> to analyze</p>
-                        </div>
+                        )}
+
+                        {loading && (
+                            <div className="w-full py-3 text-center">
+                                <div className="inline-flex items-center gap-2 text-primary">
+                                    <svg className="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                        <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeLinecap="round" opacity="0.3" />
+                                        <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="30" strokeLinecap="round" />
+                                    </svg>
+                                    <span className="text-sm font-medium">Processing...</span>
+                                </div>
+                            </div>
+                        )}
+
+                        {!imageSrc && (
+                            <p className="text-xs text-gray-500 text-center mt-2">Upload an image to begin</p>
+                        )}
                     </div>
 
-                    <div className="card p-6">
+                    <div className="card p-5">
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="w-10 h-10 rounded-lg bg-primary-soft flex items-center justify-center">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-primary">
+                            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" className="text-white">
                                     <circle cx="12" cy="12" r="10" />
                                     <polyline points="12 6 12 12 16 14" />
                                 </svg>
                             </div>
                             <h3 className="text-lg font-semibold text-gray-900">Usage Guidelines</h3>
                         </div>
-                        <ul className="space-y-3 text-sm muted leading-relaxed">
+                        <ul className="space-y-3 text-sm text-gray-600 leading-relaxed">
                             <li className="flex items-start gap-2">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-success mt-0.5 flex-shrink-0">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-success mt-0.5 shrink-0">
                                     <polyline points="20 6 9 17 4 12" />
                                 </svg>
-                                <span>Use high-resolution cropped tissue tiles (224×224 recommended for best results)</span>
+                                <span>Use high-resolution cropped tissue tiles (224×224 recommended)</span>
                             </li>
                             <li className="flex items-start gap-2">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-success mt-0.5 flex-shrink-0">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-success mt-0.5 shrink-0">
                                     <polyline points="20 6 9 17 4 12" />
                                 </svg>
                                 <span>All processing occurs in-browser; no data is uploaded to servers</span>
                             </li>
                             <li className="flex items-start gap-2">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-success mt-0.5 flex-shrink-0">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-success mt-0.5 shrink-0">
                                     <polyline points="20 6 9 17 4 12" />
                                 </svg>
                                 <span>Supported formats: JPG, PNG, WEBP (up to 10MB)</span>
