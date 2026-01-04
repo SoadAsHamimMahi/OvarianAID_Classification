@@ -73,7 +73,7 @@ export default function App() {
           {/* Feature Highlights */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div className="card p-5 md:p-6">
-              <div className="w-12 h-12 rounded-lg bg-primary flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style={{ backgroundColor: 'var(--color-primary)' }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="5" r="2" />
                   <circle cx="5" cy="12" r="2" />
@@ -89,7 +89,7 @@ export default function App() {
               <p className="text-sm text-gray-600 leading-relaxed">State-of-the-art deep learning algorithms trained on extensive histology datasets for maximum accuracy.</p>
             </div>
             <div className="card p-5 md:p-6">
-              <div className="w-12 h-12 rounded-lg bg-primary flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style={{ backgroundColor: 'var(--color-primary)' }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                   <circle cx="12" cy="12" r="3" />
@@ -101,7 +101,7 @@ export default function App() {
               <p className="text-sm text-gray-600 leading-relaxed">All processing happens in your browser. Your images never leave your device, ensuring complete data privacy.</p>
             </div>
             <div className="card p-5 md:p-6">
-              <div className="w-12 h-12 rounded-lg bg-primary flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style={{ backgroundColor: 'var(--color-primary)' }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                 </svg>
