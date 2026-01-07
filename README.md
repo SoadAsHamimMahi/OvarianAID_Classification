@@ -2,6 +2,10 @@
 
 A web-based medical image classification application designed to assist in ovarian cancer detection using machine learning. This application uses TensorFlow.js to run AI models directly in the browser for real-time image analysis.
 
+## 🌐 Live Demo
+
+**Live Application**: [https://deluxe-custard-e6611b.netlify.app/](https://deluxe-custard-e6611b.netlify.app/)
+
 ## 🎯 Purpose
 
 Ovarian Aid is a thesis project for Fall 2025 that aims to support medical professionals in early detection of ovarian abnormalities through AI-powered image classification. The application provides a user-friendly interface for uploading medical images and receiving classification predictions.
